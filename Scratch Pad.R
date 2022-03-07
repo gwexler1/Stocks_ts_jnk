@@ -3,7 +3,7 @@ library(readr)
 
 # Read zipped data
 stocks <- read_csv("nyse_stocks.csv.zip")
-
+View(stocks)
 # Convert to `tsibble()`
 stocks$date <- as.Date(stocks$date)
 stocks <- tsibble(stocks, index = date, key = symbol)
