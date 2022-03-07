@@ -1,20 +1,24 @@
 library(fpp3)
+library(readr)
 
-#Read Data
-stocks<- read.csv('nyse_stocks.csv')
-View(stocks)
-head(stocks)
+# Read zipped data
+stocks <- read_csv("nyse_stocks.csv.zip")
 
-#Convert to tsibble()
-stocks$date<- as.Date(stocks$date)
-stocks<- tsibble(stocks, index = date, key = symbol)
+# Convert to `tsibble()`
+stocks$date <- as.Date(stocks$date)
+stocks <- tsibble(stocks, index = date, key = symbol)
 
-#1 Stock
-selected_stocks = c('GOOG', 'APPL')
+# 1 stock
+selected_stock <- "AAPL"
 
-stocks%>%
+stocks %>%
+  filter(symbol == selected_stock) %>%
+  autoplot(open) +
+  labs(title = selected_stock)
+
+# Multiple stocks
+selected_stocks <- c("GOOG", "AAPL")
+
+stocks %>%
   filter(symbol %in% selected_stocks) %>%
-autoplot()+
-  labs(title = selected_stocks)
-  
-  
+  autoplot(open)
