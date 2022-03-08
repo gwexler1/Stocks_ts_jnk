@@ -7,16 +7,26 @@ ui <- fluidPage(
               selected = 1),
   dateRangeInput("selected_dates", label = h3("Date range")),
   
+    selectInput("select_data", label = h3("Select Data"), 
+                choices = c('open','close','high','low'), 
+                selected = 1),
+  
   hr(),
-  fluidRow(column(3, verbatimTextOutput("value"),verbatimTextOutput("date")))
-
+  fluidRow(column(3, verbatimTextOutput("value"),verbatimTextOutput("date"), verbatimTextOutput('data')))
 )
+
 
 
 server <- function(input, output, session) {
   output$value <- renderPrint({ 
-    input$select_stock })
+    model <- stocks[,input$select_stock]~stocks[,input$select_data] 
+    model})
   output$date <- renderPrint({ input$selected_dates })
+  output$data <- renderPrint({ 
+    input$select_data })
+  
+ # model <- stocks[,input$select_stock]~stocks[,input$select_data]
+   
 }
 
 shinyApp(ui, server)
