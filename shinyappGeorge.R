@@ -28,7 +28,7 @@ server <- function(input, output, session) {
   output$data <- renderPrint({ 
     input$select_data })
   output$plot <- renderPlot({
-    plot(stocks[input$select_stock,], stocks[input$select_data,] )
+    plot(stocks[input$select_stock==stocks$symbol, ],model[input$selected_dates == stocks$date, ],model[, input$select_data] )
   })
   
 
