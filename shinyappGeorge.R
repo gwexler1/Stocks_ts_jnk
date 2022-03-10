@@ -14,6 +14,7 @@ ui <- fluidPage(
   hr(),
   fluidRow(column(3, verbatimTextOutput("value"),verbatimTextOutput("date"), verbatimTextOutput('data'), plotOutput("plot")))
 )
+  
 
 
 
@@ -32,6 +33,17 @@ server <- function(input, output, session) {
   })
   
 
+data <- getSymbols(input$select_stock,
+                   from = input$selected_dates[1],
+                   to = input$selected_dates[2],
+                   auto.assign = FALSE
+)
+
+chartseries(data, theme = chartTheme("white"),
+            type = "line", log.scale = input$log, TA = NULL)
+
+
 }
+
 
 shinyApp(ui, server)
