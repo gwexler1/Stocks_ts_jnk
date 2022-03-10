@@ -1,5 +1,13 @@
 library(fpp3)
 library(readr)
+library(ggplot2)
+library(quantmod)
+library(plotly)
+library(shinythemes)
+library(shinyWidgets)
+library(dplyr)
+library(tidyquant)
+
 
 # Read zipped data
 stocks <- read_csv("nyse_stocks.csv.zip")
