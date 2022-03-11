@@ -30,3 +30,10 @@ selected_stocks <- c("GOOG", "AAPL")
 stocks %>%
   filter(symbol %in% selected_stocks) %>%
   autoplot(open)
+
+
+data <- getSymbols(input$select_stock,
+                   from = input$selected_dates[1],
+                   to = input$selected_dates[2],
+                   auto.assign = FALSE)
+

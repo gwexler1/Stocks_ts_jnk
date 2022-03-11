@@ -1,7 +1,16 @@
 library(shiny)
-
+library(fpp3)
+library(readr)
+library(ggplot2)
+library(quantmod)
+library(plotly)
+library(shinythemes)
+library(shinyWidgets)
+library(dplyr)
+library(tidyquant)
 
 ui <- fluidPage(
+  titlePanel("Stocks!"),
   selectInput("select_stock", label = h3("Select Stock"), 
               choices = unique(stocks$symbol), 
               selected = 1),
@@ -12,7 +21,8 @@ ui <- fluidPage(
                 selected = 1),
   
   hr(),
-  fluidRow(column(3, verbatimTextOutput("value"),verbatimTextOutput("date"), verbatimTextOutput('data'), plotOutput("plot")))
+  fluidRow(column(3, verbatimTextOutput("value"),verbatimTextOutput("date"), verbatimTextOutput('data'), 
+                  plotOutput("plot", width = "100%")))
 )
   
 
@@ -28,22 +38,16 @@ server <- function(input, output, session) {
   output$date <- renderPrint({ input$selected_dates })
   output$data <- renderPrint({ 
     input$select_data })
-  output$plot <- renderPlot({
-    plot(stocks[input$select_stock==stocks$symbol, ],model[input$selected_dates == stocks$date, ],model[, input$select_data] )
-  })
+  output$plot <- renderPlot({ data <- getSymbols(input$select_stock,
+                                                from = input$selected_dates[1],
+                                                to = input$selected_dates[2],
+                                                auto.assign = FALSE)
+
+  chart_Series(data) 
+ 
+  },height = 500, width = 800
+ 
+  )}
   
-
-data <- getSymbols(input$select_stock,
-                   from = input$selected_dates[1],
-                   to = input$selected_dates[2],
-                   auto.assign = FALSE
-)
-
-chartseries(data, theme = chartTheme("white"),
-            type = "line", log.scale = input$log, TA = NULL)
-
-
-}
-
 
 shinyApp(ui, server)
